@@ -19,15 +19,15 @@ def proceso(num, env, cpu, llegada):
     yield env.timeout(llegada)
     tiempo_inicial = env.now
     inTime = random.randint(1, 10)
-    print ("%s tiempo inicial %f usa %d pasos out CPU" % (num, tiempo_inicial, inTime))
+    print ("%s - tiempo inicial %f - utiliza %d pasos para CPU" % (num, tiempo_inicial, inTime))
 
     with cpu.request() as req:
         yield req
         yield env.timeout(inTime)
-        print ("%s libre al %f" % (num, env.now))
+        print ("%s - libre al %f" % (num, env.now))
 
     tiempo_final = env.now - tiempo_inicial
-    print ("%s el tiempo final es %f" % (num, tiempo_final))
+    print ("%s - el tiempo final es %f" % (num, tiempo_final))
     tiempo_final = tiempo_final + tiempo_final
 
 random.seed(3)
@@ -36,13 +36,8 @@ initial_cpu = simpy.Resource(env, capacity=1)
 tiempo_final = 0
 initial_procesos = 50  
 
-#initial_ram = simpy.Container(env, 30, init=30)  # crea el container de la ram
-
-
 for i in range(initial_procesos):
     llegada = 0 
-    #cantidad_instrucciones = random.randint(1, 10)  
-    #UsoRam = random.randint(1, 10)  
     env.process(proceso('proceso %d' % i, env, initial_cpu, llegada))
 
 # correr la simulacion
